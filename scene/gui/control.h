@@ -62,7 +62,8 @@ public:
 	enum FocusMode {
 		FOCUS_NONE,
 		FOCUS_CLICK,
-		FOCUS_ALL
+		FOCUS_ALL,
+		FOCUS_RELEASE
 	};
 
 	enum SizeFlags {
