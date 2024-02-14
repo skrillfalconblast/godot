@@ -1812,7 +1812,7 @@ void Viewport::_gui_input_event(Ref<InputEvent> p_event) {
 				while (ci) {
 					Control *control = Object::cast_to<Control>(ci);
 					if (control) {
-						if (control->get_focus_mode() != Control::FOCUS_NONE) {
+						if ((control->get_focus_mode() != Control::FOCUS_NONE) && (control->get_focus_mode() != Control::FOCUS_RELEASE)) {
 							if (control != gui.key_focus) {
 								control->grab_focus();
 							}
@@ -1858,6 +1858,32 @@ void Viewport::_gui_input_event(Ref<InputEvent> p_event) {
 			mb = mb->xformed_by(Transform2D()); // Make a copy.
 			Point2 pos = gui.mouse_focus->get_global_transform_with_canvas().affine_inverse().xform(mpos);
 			mb->set_position(pos);
+
+			if (mb->get_button_index() == MouseButton::LEFT) { // Assign focus.
+                		CanvasItem *ci = gui.mouse_focus;
+                		while (ci) {
+                    			Control *control = Object::cast_to<Control>(ci);
+                    			if (control) {
+                        			if (control->get_focus_mode() == Control::FOCUS_RELEASE) {
+                            				if (control != gui.key_focus) {
+                                				control->grab_focus();
+                            				}
+                            				break;
+                        			}
+
+                        			if (control->data.mouse_filter == Control::MOUSE_FILTER_STOP) {
+                            				break;
+                        			}
+                    			}
+
+                    			if (ci->is_set_as_top_level()) {
+                        			break;
+                    			}
+
+                    			ci = ci->get_parent_item();
+                		}
+            		}
+	
 
 			Control *mouse_focus = gui.mouse_focus;
 
