@@ -176,8 +176,8 @@
 	print_verbose("Adding observer for keyboard show/hide.");
 	[[NSNotificationCenter defaultCenter]
 			addObserver:self
-			   selector:@selector(keyboardOnScreen:)
-				   name:UIKeyboardDidShowNotification
+			   selector:@selector(keyboardWillShow:)
+				   name:UIKeyboardWillShowNotification
 				 object:nil];
 	[[NSNotificationCenter defaultCenter]
 			addObserver:self
@@ -290,7 +290,7 @@
 
 // MARK: Keyboard
 
-- (void)keyboardOnScreen:(NSNotification *)notification {
+- (void)keyboardWillShow:(NSNotification *)notification {
 	NSDictionary *info = notification.userInfo;
 	NSValue *value = info[UIKeyboardFrameEndUserInfoKey];
 
